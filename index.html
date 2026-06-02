@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vestige - AI Outfit Memory</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <svg class="icon-sprite" aria-hidden="true">
+      <symbol id="i-home" viewBox="0 0 24 24">
+        <path d="m3 10.8 9-7 9 7" />
+        <path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" />
+      </symbol>
+      <symbol id="i-closet" viewBox="0 0 24 24">
+        <path d="M5 4h14v16H5z" />
+        <path d="M12 4v16" />
+        <path d="M9 12h.1" />
+        <path d="M15 12h.1" />
+      </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="m12 3-2 6-6 2 6 2 2 6 2-6 6-2-6-2-2-6Z" />
+        <path d="M5 4v3" />
+        <path d="M3.5 5.5h3" />
+        <path d="M19 17v3" />
+        <path d="M17.5 18.5h3" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24">
+        <path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+        <circle cx="12" cy="13" r="4" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m5 13 4 4L19 7" />
+      </symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24">
+        <path d="M20 11a8 8 0 0 0-14.1-5L4 8" />
+        <path d="M4 4v4h4" />
+        <path d="M4 13a8 8 0 0 0 14.1 5L20 16" />
+        <path d="M20 20v-4h-4" />
+      </symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24">
+        <path d="M20.8 5.8a5.3 5.3 0 0 0-7.5 0L12 7.1l-1.3-1.3a5.3 5.3 0 0 0-7.5 7.5L12 22l8.8-8.7a5.3 5.3 0 0 0 0-7.5Z" />
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24">
+        <path d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
+        <path d="M16 2v4" />
+        <path d="M8 2v4" />
+        <path d="M3 10h18" />
+      </symbol>
+      <symbol id="i-swap" viewBox="0 0 24 24">
+        <path d="M7 7h11l-3-3" />
+        <path d="m18 7-3 3" />
+        <path d="M17 17H6l3 3" />
+        <path d="m6 17 3-3" />
+      </symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24">
+        <path d="M4 7h7" />
+        <path d="M15 7h5" />
+        <path d="M13 5v4" />
+        <path d="M4 17h4" />
+        <path d="M12 17h8" />
+        <path d="M10 15v4" />
+      </symbol>
+      <symbol id="i-more" viewBox="0 0 24 24">
+        <path d="M12 12h.01" />
+        <path d="M19 12h.01" />
+        <path d="M5 12h.01" />
+      </symbol>
+    </svg>
+
+    <main class="workspace" aria-label="Vestige 手机产品界面">
+      <section class="phone" aria-label="Vestige App">
+        <header class="status-bar">
+          <span>9:41</span>
+          <span>5G&nbsp;&nbsp;87%</span>
+        </header>
+
+        <div class="screen active" data-screen="today">
+          <header class="topbar">
+            <div>
+              <p class="kicker">Vestige</p>
+              <h1>今天穿什么</h1>
+            </div>
+            <button class="icon-btn" type="button" aria-label="添加穿搭" title="添加穿搭" data-sheet="capture-sheet">
+              <svg><use href="#i-plus"></use></svg>
+            </button>
+          </header>
+
+          <section class="context-row" aria-label="今日状态">
+            <button class="context-pill active" type="button">
+              <strong>26°C</strong>
+              <span>多云 低风</span>
+            </button>
+            <button class="context-pill" type="button">
+              <strong>通勤</strong>
+              <span>10:30 评审</span>
+            </button>
+            <button class="context-pill" type="button">
+              <strong>3 分钟</strong>
+              <span>完成决策</span>
+            </button>
+          </section>
+
+          <section class="hero-card" aria-label="今日首选穿搭">
+            <div class="hero-media">
+              <img id="hero-outfit-image" src="./assets/hero-outfit.png" alt="灰色夹克、白色上衣、深蓝直筒裤和黑色乐福鞋的穿搭照片" />
+              <div class="media-shade"></div>
+              <div class="score-chip">
+                <span>匹配度</span>
+                <strong>94</strong>
+              </div>
+              <div class="scan-chip">
+                <svg><use href="#i-spark"></use></svg>
+                已避开近 7 日重复
+              </div>
+            </div>
+            <div class="hero-panel">
+              <div class="title-row">
+                <div>
+                  <p class="label">首选组合</p>
+                  <h2 id="main-outfit-title">灰短夹克 / 白 T / 深蓝直筒裤</h2>
+                </div>
+                <button class="icon-btn light" type="button" aria-label="收藏" title="收藏">
+                  <svg><use href="#i-heart"></use></svg>
+                </button>
+              </div>
+              <div class="reason-list">
+                <span>显精神</span>
+                <span>适合会议</span>
+                <span>鞋包已匹配</span>
+              </div>
+              <div class="primary-actions">
+                <button class="primary-btn" type="button" id="wear-today">
+                  <svg><use href="#i-check"></use></svg>
+                  今天穿
+                </button>
+                <button class="icon-btn light" type="button" id="refresh-outfit" aria-label="换一套" title="换一套">
+                  <svg><use href="#i-refresh"></use></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="insight-band" aria-label="今日穿搭判断">
+            <div>
+              <span class="dot teal"></span>
+              <p>深色下装平衡比例，外套 12 天未穿。</p>
+            </div>
+            <strong>可复穿</strong>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <h2>早晨三选</h2>
+              <span>按日程排序</span>
+            </div>
+            <div class="outfit-stack">
+              <button class="outfit-row active" type="button" data-outfit="0">
+                <span class="outfit-thumb">
+                  <img src="./assets/hero-outfit.png" alt="" />
+                </span>
+                <span>
+                  <strong>稳妥通勤</strong>
+                  <small>灰夹克 / 白 T / 深蓝裤</small>
+                </span>
+                <b>94</b>
+              </button>
+              <button class="outfit-row" type="button" data-outfit="1">
+                <span class="outfit-thumb">
+                  <img src="./assets/outfit-evening.png" alt="" />
+                </span>
+                <span>
+                  <strong>更正式</strong>
+                  <small>黑针织 / 灰西裤 / 乐福鞋</small>
+                </span>
+                <b>91</b>
+              </button>
+              <button class="outfit-row" type="button" data-outfit="2">
+                <span class="outfit-thumb">
+                  <img src="./assets/outfit-weekend.png" alt="" />
+                </span>
+                <span>
+                  <strong>轻松一点</strong>
+                  <small>牛仔衬衫 / 卡其裤 / 白鞋</small>
+                </span>
+                <b>87</b>
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <div class="screen" data-screen="closet">
+          <header class="topbar">
+            <div>
+              <p class="kicker">72 件单品</p>
+              <h1>衣橱资产</h1>
+            </div>
+            <button class="icon-btn" type="button" aria-label="拍照录入" title="拍照录入" data-sheet="capture-sheet">
+              <svg><use href="#i-camera"></use></svg>
+            </button>
+          </header>
+
+          <label class="search-field">
+            <svg><use href="#i-search"></use></svg>
+            <input type="search" placeholder="搜索黑色、通勤、外套" />
+          </label>
+
+          <section class="closet-hero" aria-label="衣橱概览">
+            <img src="./assets/wardrobe-flatlay.png" alt="夹克、针织、T 恤、长裤、乐福鞋和包的衣橱平铺照片" />
+            <div class="closet-hero-copy">
+              <p class="label">本周利用率</p>
+              <strong>64%</strong>
+              <span>4 件单品建议复穿</span>
+            </div>
+          </section>
+
+          <div class="filter-tabs" role="tablist" aria-label="衣橱筛选">
+            <button class="active" type="button" data-filter="all">全部</button>
+            <button type="button" data-filter="outer">外套</button>
+            <button type="button" data-filter="top">内搭</button>
+            <button type="button" data-filter="bottom">下装</button>
+            <button type="button" data-filter="shoes">鞋包</button>
+          </div>
+
+          <section class="metric-grid" aria-label="衣橱指标">
+            <div>
+              <strong>18</strong>
+              <span>成套组合</span>
+            </div>
+            <div>
+              <strong>7</strong>
+              <span>核心单品</span>
+            </div>
+            <div>
+              <strong>¥18</strong>
+              <span>日均成本</span>
+            </div>
+          </section>
+
+          <section class="item-grid" aria-label="单品列表">
+            <button class="item-tile" type="button" data-category="outer" data-sheet="item-sheet" data-item-name="灰色短夹克" data-item-meta="外套 / 春秋 / 12 天未穿" data-item-price="¥21 / 次" data-item-score="92">
+              <span class="cloth jacket"></span>
+              <div>
+                <h3>灰色短夹克</h3>
+                <p>12 天未穿</p>
+              </div>
+            </button>
+            <button class="item-tile" type="button" data-category="top" data-sheet="item-sheet" data-item-name="白色圆领 T" data-item-meta="内搭 / 四季 / 高频" data-item-price="¥3 / 次" data-item-score="89">
+              <span class="cloth tee"></span>
+              <div>
+                <h3>白色圆领 T</h3>
+                <p>高频内搭</p>
+              </div>
+            </button>
+            <button class="item-tile" type="button" data-category="bottom" data-sheet="item-sheet" data-item-name="深蓝直筒裤" data-item-meta="下装 / 通勤 / 核心单品" data-item-price="¥9 / 次" data-item-score="94">
+              <span class="cloth trouser navy"></span>
+              <div>
+                <h3>深蓝直筒裤</h3>
+                <p>通勤核心</p>
+              </div>
+            </button>
+            <button class="item-tile" type="button" data-category="shoes" data-sheet="item-sheet" data-item-name="黑色乐福鞋" data-item-meta="鞋履 / 正式 / 31 次穿着" data-item-price="¥15 / 次" data-item-score="90">
+              <span class="cloth loafer"></span>
+              <div>
+                <h3>黑色乐福鞋</h3>
+                <p>正式度 +2</p>
+              </div>
+            </button>
+            <button class="item-tile" type="button" data-category="bottom" data-sheet="item-sheet" data-item-name="卡其休闲裤" data-item-meta="下装 / 周末 / 低饱和" data-item-price="¥12 / 次" data-item-score="84">
+              <span class="cloth trouser khaki"></span>
+              <div>
+                <h3>卡其休闲裤</h3>
+                <p>周末优先</p>
+              </div>
+            </button>
+            <button class="item-tile" type="button" data-category="top" data-sheet="item-sheet" data-item-name="米白针织" data-item-meta="内搭 / 春秋 / 叠穿友好" data-item-price="¥16 / 次" data-item-score="86">
+              <span class="cloth knit"></span>
+              <div>
+                <h3>米白针织</h3>
+                <p>叠穿友好</p>
+              </div>
+            </button>
+          </section>
+        </div>
+
+        <div class="screen" data-screen="memory">
+          <header class="topbar">
+            <div>
+              <p class="kicker">穿搭记忆</p>
+              <h1>复穿档案</h1>
+            </div>
+            <button class="icon-btn" type="button" aria-label="日历" title="日历">
+              <svg><use href="#i-calendar"></use></svg>
+            </button>
+          </header>
+
+          <section class="calendar-strip" aria-label="本周穿搭分数">
+            <button type="button">
+              <span>一</span>
+              <strong>82</strong>
+            </button>
+            <button type="button">
+              <span>二</span>
+              <strong>88</strong>
+            </button>
+            <button class="active" type="button">
+              <span>三</span>
+              <strong>94</strong>
+            </button>
+            <button type="button">
+              <span>四</span>
+              <strong>79</strong>
+            </button>
+            <button class="empty" type="button">
+              <span>五</span>
+              <strong></strong>
+            </button>
+            <button class="empty" type="button">
+              <span>六</span>
+              <strong></strong>
+            </button>
+            <button class="empty" type="button">
+              <span>日</span>
+              <strong></strong>
+            </button>
+          </section>
+
+          <section class="memory-feature" data-sheet="outfit-sheet" data-outfit-name="灰短夹克 / 深蓝直筒裤" data-outfit-meta="会议日稳定好看，适合直接复穿。" data-outfit-score="94" data-outfit-image="./assets/hero-outfit.png">
+            <img src="./assets/hero-outfit.png" alt="高分穿搭照片" />
+            <div>
+              <p class="label">最近高分</p>
+              <h2>灰短夹克 / 深蓝直筒裤</h2>
+              <p>会议日稳定好看，适合直接复穿。</p>
+              <div class="reason-list">
+                <span>94 分</span>
+                <span>12 天未穿</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <h2>可复穿记录</h2>
+              <span>按场景聚合</span>
+            </div>
+            <button class="timeline-card" type="button" data-sheet="outfit-sheet" data-outfit-name="黑短夹克 / 高领内搭" data-outfit-meta="晚间聚餐，利落但不强势。" data-outfit-score="93" data-outfit-image="./assets/outfit-evening.png">
+              <time>05.18</time>
+              <div>
+                <h3>黑短夹克 + 高领内搭</h3>
+                <p>晚间聚餐，利落但不强势。</p>
+              </div>
+              <strong>93</strong>
+            </button>
+            <button class="timeline-card" type="button" data-sheet="outfit-sheet" data-outfit-name="牛仔衬衫 / 卡其裤" data-outfit-meta="展览和咖啡都自然。" data-outfit-score="90" data-outfit-image="./assets/outfit-weekend.png">
+              <time>05.12</time>
+              <div>
+                <h3>牛仔衬衫 + 卡其裤</h3>
+                <p>展览和咖啡都自然。</p>
+              </div>
+              <strong>90</strong>
+            </button>
+            <button class="timeline-card" type="button" data-sheet="outfit-sheet" data-outfit-name="米白针织 / 深色长裤" data-outfit-meta="低对比、干净，适合阴天。" data-outfit-score="86" data-outfit-image="./assets/outfit-evening.png">
+              <time>05.04</time>
+              <div>
+                <h3>米白针织 + 深色长裤</h3>
+                <p>低对比、干净，适合阴天。</p>
+              </div>
+              <strong>86</strong>
+            </button>
+          </section>
+        </div>
+
+        <div class="screen" data-screen="studio">
+          <header class="topbar">
+            <div>
+              <p class="kicker">AI Studio</p>
+              <h1>识别与替换</h1>
+            </div>
+            <button class="icon-btn" type="button" aria-label="更多设置" title="更多设置" data-sheet="ai-rules-sheet">
+              <svg><use href="#i-sliders"></use></svg>
+            </button>
+          </header>
+
+          <div class="mode-switch" role="tablist" aria-label="AI 模式">
+            <button class="active" type="button" data-ai-panel="identify">识别</button>
+            <button type="button" data-ai-panel="replace">替换</button>
+          </div>
+
+          <section class="ai-panel active" data-panel="identify">
+            <div class="scan-stage">
+              <img src="./assets/hero-outfit.png" alt="AI 正在识别穿搭单品的照片" />
+              <span class="detect-box jacket-box">短夹克 96%</span>
+              <span class="detect-box tee-box">白 T 92%</span>
+              <span class="detect-box pant-box">直筒裤 94%</span>
+              <span class="detect-box shoe-box">乐福鞋 89%</span>
+            </div>
+            <section class="detected-sheet">
+              <div class="sheet-head">
+                <div>
+                  <p class="label">识别结果</p>
+                  <h2>4 件单品已入库</h2>
+                </div>
+                <button class="small-btn" type="button" data-confirm-all>全部确认</button>
+              </div>
+              <div class="detect-list">
+                <button type="button" data-sheet="confirm-sheet" data-detect-name="灰色短夹克" data-detect-type="外套" data-detect-confidence="96%">
+                  <span class="mini-dot charcoal"></span>
+                  灰色短夹克
+                  <b>外套</b>
+                </button>
+                <button type="button" data-sheet="confirm-sheet" data-detect-name="白色圆领 T" data-detect-type="内搭" data-detect-confidence="92%">
+                  <span class="mini-dot ivory"></span>
+                  白色圆领 T
+                  <b>内搭</b>
+                </button>
+                <button type="button" data-sheet="confirm-sheet" data-detect-name="深蓝直筒裤" data-detect-type="下装" data-detect-confidence="94%">
+                  <span class="mini-dot navy"></span>
+                  深蓝直筒裤
+                  <b>下装</b>
+                </button>
+                <button type="button" data-sheet="confirm-sheet" data-detect-name="黑色乐福鞋" data-detect-type="鞋履" data-detect-confidence="89%">
+                  <span class="mini-dot black"></span>
+                  黑色乐福鞋
+                  <b>鞋履</b>
+                </button>
+              </div>
+            </section>
+          </section>
+
+          <section class="ai-panel" data-panel="replace">
+            <section class="compare-stage" aria-label="替换预览">
+              <div>
+                <span>原搭配</span>
+                <img src="./assets/hero-outfit.png" alt="原穿搭照片" />
+              </div>
+              <div>
+                <span>替换后</span>
+                <img src="./assets/hero-outfit.png" alt="替换后的穿搭预览" />
+                <i class="pants-overlay"></i>
+              </div>
+            </section>
+            <section class="replace-sheet">
+              <div class="replace-head">
+                <div>
+                  <p class="label">替换下装</p>
+                  <h2 id="replace-title">卡其休闲裤</h2>
+                </div>
+                <button class="primary-btn compact" type="button" id="preview-btn">
+                  <svg><use href="#i-swap"></use></svg>
+                  生成
+                </button>
+              </div>
+              <div class="candidate-row">
+                <button class="selected" type="button" data-replace="卡其休闲裤">
+                  <span class="cloth trouser khaki"></span>
+                </button>
+                <button type="button" data-replace="深蓝直筒裤">
+                  <span class="cloth trouser navy"></span>
+                </button>
+                <button type="button" data-replace="米白针织">
+                  <span class="cloth knit"></span>
+                </button>
+              </div>
+            </section>
+          </section>
+        </div>
+
+        <nav class="bottom-nav" aria-label="主导航">
+          <button class="active" type="button" data-target="today">
+            <svg><use href="#i-home"></use></svg>
+            <span>今日</span>
+          </button>
+          <button type="button" data-target="closet">
+            <svg><use href="#i-closet"></use></svg>
+            <span>衣橱</span>
+          </button>
+          <button type="button" data-target="memory">
+            <svg><use href="#i-clock"></use></svg>
+            <span>记忆</span>
+          </button>
+          <button type="button" data-target="studio">
+            <svg><use href="#i-spark"></use></svg>
+            <span>AI</span>
+          </button>
+        </nav>
+      </section>
+
+      <aside class="product-notes" aria-label="产品设计摘要">
+        <p>Personal Outfit Memory</p>
+        <h2>从“整理衣服”转向“复用好看的自己”。</h2>
+        <ul>
+          <li>首页直接给出可穿方案，减少早晨决策。</li>
+          <li>衣橱作为资产层，承载利用率和日均成本。</li>
+          <li>AI 工作台只做识别、确认、替换，不夸大虚拟试衣。</li>
+        </ul>
+      </aside>
+    </main>
+
+    <div class="sheet-backdrop" data-close-sheet></div>
+
+    <section class="sheet" id="capture-sheet" aria-label="新增穿搭录入">
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">Capture</p>
+          <h2>录入新的穿搭记忆</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="capture-grid">
+        <button type="button" data-capture-action="穿搭照">
+          <svg><use href="#i-camera"></use></svg>
+          <strong>上传穿搭照</strong>
+          <span>识别整套搭配并保存为记忆</span>
+        </button>
+        <button type="button" data-capture-action="单品">
+          <svg><use href="#i-closet"></use></svg>
+          <strong>拍一件单品</strong>
+          <span>加入衣橱，补齐颜色和季节</span>
+        </button>
+        <button type="button" data-capture-action="购物截图">
+          <svg><use href="#i-spark"></use></svg>
+          <strong>导入购物截图</strong>
+          <span>提取单品信息和预估成本</span>
+        </button>
+      </div>
+      <div class="process-card">
+        <span>01 识别单品</span>
+        <span>02 用户确认</span>
+        <span>03 生成复穿规则</span>
+      </div>
+    </section>
+
+    <section class="sheet" id="item-sheet" aria-label="单品详情">
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">Wardrobe Asset</p>
+          <h2 id="item-sheet-name">灰色短夹克</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="item-detail">
+        <span class="cloth jacket" id="item-sheet-cloth"></span>
+        <div class="detail-copy">
+          <p id="item-sheet-meta">外套 / 春秋 / 12 天未穿</p>
+          <div class="detail-metrics">
+            <div>
+              <strong id="item-sheet-score">92</strong>
+              <span>适配分</span>
+            </div>
+            <div>
+              <strong id="item-sheet-price">¥21 / 次</strong>
+              <span>穿着成本</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="match-list">
+        <button type="button">可搭配：白 T / 深蓝直筒裤 / 乐福鞋</button>
+        <button type="button">建议场景：通勤、会议、晚间聚餐</button>
+      </div>
+    </section>
+
+    <section class="sheet" id="outfit-sheet" aria-label="穿搭详情">
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">Outfit Memory</p>
+          <h2 id="outfit-sheet-name">灰短夹克 / 深蓝直筒裤</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="outfit-detail-card">
+        <img id="outfit-sheet-image" src="./assets/hero-outfit.png" alt="穿搭详情照片" />
+        <div>
+          <strong id="outfit-sheet-score">94</strong>
+          <span>复穿分</span>
+        </div>
+      </div>
+      <p class="sheet-note" id="outfit-sheet-meta">会议日稳定好看，适合直接复穿。</p>
+      <div class="sheet-actions">
+        <button class="primary-btn" type="button" data-close-sheet>设为明日候选</button>
+        <button class="ghost-btn" type="button" data-close-sheet>查看组成单品</button>
+      </div>
+    </section>
+
+    <section class="sheet" id="confirm-sheet" aria-label="AI 识别确认">
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">AI Confirm</p>
+          <h2 id="confirm-name">灰色短夹克</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="confirm-form">
+        <label>
+          <span>类别</span>
+          <select id="confirm-type">
+            <option>外套</option>
+            <option>内搭</option>
+            <option>下装</option>
+            <option>鞋履</option>
+            <option>包袋</option>
+          </select>
+        </label>
+        <label>
+          <span>识别置信度</span>
+          <input id="confirm-confidence" value="96%" />
+        </label>
+        <label>
+          <span>风格标签</span>
+          <input value="通勤、干净、低饱和" />
+        </label>
+      </div>
+      <button class="primary-btn full" type="button" data-confirm-one>确认并入库</button>
+    </section>
+
+    <section class="sheet" id="ai-rules-sheet" aria-label="AI 规则设置">
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">AI Rules</p>
+          <h2>推荐与生成边界</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="rule-list">
+        <label><input type="checkbox" checked /> 避开 7 日内重复单品</label>
+        <label><input type="checkbox" checked /> 优先复用高分历史穿搭</label>
+        <label><input type="checkbox" checked /> 生成预览仅作为风格参考</label>
+      </div>
+    </section>
+
+    <div class="toast" role="status" aria-live="polite">已记录今天穿搭</div>
+    <script src="./app.js"></script>
+  </body>
+</html>
