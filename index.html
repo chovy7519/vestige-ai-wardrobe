@@ -99,15 +99,15 @@
           </header>
 
           <section class="context-row" aria-label="今日状态">
-            <button class="context-pill active" type="button">
+            <button class="context-pill active" type="button" data-sheet="routine-sheet">
               <strong>26°C</strong>
               <span>多云 低风</span>
             </button>
-            <button class="context-pill" type="button">
+            <button class="context-pill" type="button" data-sheet="routine-sheet">
               <strong>通勤</strong>
               <span>10:30 评审</span>
             </button>
-            <button class="context-pill" type="button">
+            <button class="context-pill" type="button" data-sheet="routine-sheet">
               <strong>3 分钟</strong>
               <span>完成决策</span>
             </button>
@@ -212,9 +212,9 @@
             </button>
           </header>
 
-          <label class="search-field">
+          <label class="search-field" for="closet-search">
             <svg><use href="#i-search"></use></svg>
-            <input type="search" placeholder="搜索黑色、通勤、外套" />
+            <input id="closet-search" type="search" placeholder="搜索黑色、通勤、外套" aria-label="搜索衣橱单品" autocomplete="off" />
           </label>
 
           <section class="closet-hero" aria-label="衣橱概览">
@@ -227,11 +227,11 @@
           </section>
 
           <div class="filter-tabs" role="tablist" aria-label="衣橱筛选">
-            <button class="active" type="button" data-filter="all">全部</button>
-            <button type="button" data-filter="outer">外套</button>
-            <button type="button" data-filter="top">内搭</button>
-            <button type="button" data-filter="bottom">下装</button>
-            <button type="button" data-filter="shoes">鞋包</button>
+            <button class="active" type="button" role="tab" aria-selected="true" data-filter="all">全部</button>
+            <button type="button" role="tab" aria-selected="false" data-filter="outer">外套</button>
+            <button type="button" role="tab" aria-selected="false" data-filter="top">内搭</button>
+            <button type="button" role="tab" aria-selected="false" data-filter="bottom">下装</button>
+            <button type="button" role="tab" aria-selected="false" data-filter="shoes">鞋包</button>
           </div>
 
           <section class="metric-grid" aria-label="衣橱指标">
@@ -293,6 +293,12 @@
               </div>
             </button>
           </section>
+          <section class="empty-state hidden" id="closet-empty" aria-live="polite">
+            <svg><use href="#i-search"></use></svg>
+            <h2>没有匹配的单品</h2>
+            <p>换一个颜色、场景或分类，或者先录入新的衣服。</p>
+            <button class="ghost-btn" type="button" id="reset-closet">清空筛选</button>
+          </section>
         </div>
 
         <div class="screen" data-screen="memory">
@@ -337,7 +343,7 @@
             </button>
           </section>
 
-          <section class="memory-feature" data-sheet="outfit-sheet" data-outfit-name="灰短夹克 / 深蓝直筒裤" data-outfit-meta="会议日稳定好看，适合直接复穿。" data-outfit-score="94" data-outfit-image="./assets/hero-outfit.png">
+          <button class="memory-feature" type="button" data-sheet="outfit-sheet" data-outfit-name="灰短夹克 / 深蓝直筒裤" data-outfit-meta="会议日稳定好看，适合直接复穿。" data-outfit-score="94" data-outfit-image="./assets/hero-outfit.png">
             <img src="./assets/hero-outfit.png" alt="高分穿搭照片" />
             <div>
               <p class="label">最近高分</p>
@@ -348,7 +354,7 @@
                 <span>12 天未穿</span>
               </div>
             </div>
-          </section>
+          </button>
 
           <section class="section">
             <div class="section-head">
@@ -394,11 +400,11 @@
           </header>
 
           <div class="mode-switch" role="tablist" aria-label="AI 模式">
-            <button class="active" type="button" data-ai-panel="identify">识别</button>
-            <button type="button" data-ai-panel="replace">替换</button>
+            <button class="active" type="button" role="tab" aria-selected="true" aria-controls="identify-panel" data-ai-panel="identify">识别</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="replace-panel" data-ai-panel="replace">替换</button>
           </div>
 
-          <section class="ai-panel active" data-panel="identify">
+          <section class="ai-panel active" id="identify-panel" role="tabpanel" data-panel="identify">
             <div class="scan-stage">
               <img src="./assets/hero-outfit.png" alt="AI 正在识别穿搭单品的照片" />
               <span class="detect-box jacket-box">短夹克 96%</span>
@@ -439,7 +445,7 @@
             </section>
           </section>
 
-          <section class="ai-panel" data-panel="replace">
+          <section class="ai-panel" id="replace-panel" role="tabpanel" data-panel="replace">
             <section class="compare-stage" aria-label="替换预览">
               <div>
                 <span>原搭配</span>
@@ -463,13 +469,13 @@
                 </button>
               </div>
               <div class="candidate-row">
-                <button class="selected" type="button" data-replace="卡其休闲裤">
+                <button class="selected" type="button" data-replace="卡其休闲裤" aria-label="替换为卡其休闲裤" title="卡其休闲裤">
                   <span class="cloth trouser khaki"></span>
                 </button>
-                <button type="button" data-replace="深蓝直筒裤">
+                <button type="button" data-replace="深蓝直筒裤" aria-label="替换为深蓝直筒裤" title="深蓝直筒裤">
                   <span class="cloth trouser navy"></span>
                 </button>
-                <button type="button" data-replace="米白针织">
+                <button type="button" data-replace="米白针织" aria-label="替换为米白针织" title="米白针织">
                   <span class="cloth knit"></span>
                 </button>
               </div>
@@ -508,9 +514,9 @@
       </aside>
     </main>
 
-    <div class="sheet-backdrop" data-close-sheet></div>
+    <div class="sheet-backdrop" data-close-sheet aria-hidden="true"></div>
 
-    <section class="sheet" id="capture-sheet" aria-label="新增穿搭录入">
+    <section class="sheet" id="capture-sheet" aria-label="新增穿搭录入" aria-hidden="true" inert>
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>
@@ -543,7 +549,54 @@
       </div>
     </section>
 
-    <section class="sheet" id="item-sheet" aria-label="单品详情">
+    <section class="sheet" id="routine-sheet" aria-label="今日偏好设置" aria-hidden="true" inert>
+      <div class="sheet-handle"></div>
+      <header class="sheet-title">
+        <div>
+          <p class="label">Daily Brief</p>
+          <h2>调整今日推荐条件</h2>
+        </div>
+        <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
+      </header>
+      <div class="brief-card">
+        <div>
+          <span>天气</span>
+          <strong>26°C / 多云 / 低风</strong>
+        </div>
+        <div>
+          <span>日程</span>
+          <strong>10:30 方案评审</strong>
+        </div>
+      </div>
+      <div class="confirm-form">
+        <label>
+          <span>今日场景</span>
+          <select id="routine-occasion">
+            <option>通勤</option>
+            <option>正式会议</option>
+            <option>周末展览</option>
+            <option>晚间聚餐</option>
+          </select>
+        </label>
+        <label>
+          <span>形象强度</span>
+          <select id="routine-presence">
+            <option>克制、干净</option>
+            <option>更正式</option>
+            <option>更松弛</option>
+            <option>更有记忆点</option>
+          </select>
+        </label>
+      </div>
+      <div class="rule-list compact">
+        <label><input type="checkbox" checked /> 避开近 7 日重复穿搭</label>
+        <label><input type="checkbox" checked /> 优先使用高分复穿记录</label>
+        <label><input type="checkbox" /> 排除需要熨烫的单品</label>
+      </div>
+      <button class="primary-btn full" type="button" id="apply-routine">更新今日推荐</button>
+    </section>
+
+    <section class="sheet" id="item-sheet" aria-label="单品详情" aria-hidden="true" inert>
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>
@@ -574,7 +627,7 @@
       </div>
     </section>
 
-    <section class="sheet" id="outfit-sheet" aria-label="穿搭详情">
+    <section class="sheet" id="outfit-sheet" aria-label="穿搭详情" aria-hidden="true" inert>
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>
@@ -597,7 +650,7 @@
       </div>
     </section>
 
-    <section class="sheet" id="confirm-sheet" aria-label="AI 识别确认">
+    <section class="sheet" id="confirm-sheet" aria-label="AI 识别确认" aria-hidden="true" inert>
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>
@@ -629,7 +682,7 @@
       <button class="primary-btn full" type="button" data-confirm-one>确认并入库</button>
     </section>
 
-    <section class="sheet" id="ai-rules-sheet" aria-label="AI 规则设置">
+    <section class="sheet" id="ai-rules-sheet" aria-label="AI 规则设置" aria-hidden="true" inert>
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>

@@ -673,6 +673,44 @@ svg {
   font-weight: 760;
 }
 
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 28px 18px;
+  border: 1px dashed rgba(38, 41, 36, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.58);
+  text-align: center;
+}
+
+.empty-state.hidden {
+  display: none;
+}
+
+.empty-state svg {
+  width: 28px;
+  height: 28px;
+  color: var(--teal);
+}
+
+.empty-state h2,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state h2 {
+  font-size: 18px;
+}
+
+.empty-state p {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.45;
+}
+
 .cloth {
   position: relative;
   display: block;
@@ -810,8 +848,11 @@ svg {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
+  color: var(--ink);
   box-shadow: var(--soft-shadow);
   cursor: pointer;
+  text-align: left;
+  width: 100%;
 }
 
 .memory-feature img {
@@ -1308,6 +1349,41 @@ svg {
   text-align: center;
 }
 
+.brief-card {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.brief-card div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #edf2ed;
+}
+
+.brief-card span,
+.brief-card strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brief-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.brief-card strong {
+  font-size: 13px;
+}
+
 .item-detail {
   display: grid;
   grid-template-columns: 128px minmax(0, 1fr);
@@ -1475,6 +1551,10 @@ svg {
 .rule-list {
   display: grid;
   gap: 8px;
+}
+
+.rule-list.compact {
+  margin-bottom: 12px;
 }
 
 .rule-list label {

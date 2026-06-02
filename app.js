@@ -90,16 +90,56 @@ $("#wear-today").addEventListener("click", () => {
 
 const filterButtons = $$("[data-filter]");
 const itemTiles = $$(".item-tile");
+const closetSearch = $("#closet-search");
+const closetEmpty = $("#closet-empty");
+let activeFilter = "all";
+
+const updateCloset = () => {
+  const query = closetSearch.value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  itemTiles.forEach((tile) => {
+    const categoryMatch = activeFilter === "all" || tile.dataset.category === activeFilter;
+    const text = tile.textContent.toLowerCase();
+    const meta = `${tile.dataset.itemName} ${tile.dataset.itemMeta}`.toLowerCase();
+    const queryMatch = !query || text.includes(query) || meta.includes(query);
+    const visible = categoryMatch && queryMatch;
+
+    tile.classList.toggle("hidden", !visible);
+    if (visible) {
+      visibleCount += 1;
+    }
+  });
+
+  closetEmpty.classList.toggle("hidden", visibleCount > 0);
+};
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
+    activeFilter = button.dataset.filter;
 
-    filterButtons.forEach((item) => item.classList.toggle("active", item === button));
-    itemTiles.forEach((tile) => {
-      tile.classList.toggle("hidden", filter !== "all" && tile.dataset.category !== filter);
+    filterButtons.forEach((item) => {
+      const active = item === button;
+
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-selected", active ? "true" : "false");
     });
+    updateCloset();
   });
+});
+
+closetSearch.addEventListener("input", updateCloset);
+
+$("#reset-closet").addEventListener("click", () => {
+  activeFilter = "all";
+  closetSearch.value = "";
+  filterButtons.forEach((item) => {
+    const active = item.dataset.filter === "all";
+
+    item.classList.toggle("active", active);
+    item.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  updateCloset();
 });
 
 const aiButtons = $$("[data-ai-panel]");
@@ -109,7 +149,12 @@ aiButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const panel = button.dataset.aiPanel;
 
-    aiButtons.forEach((item) => item.classList.toggle("active", item === button));
+    aiButtons.forEach((item) => {
+      const active = item === button;
+
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-selected", active ? "true" : "false");
+    });
     aiPanels.forEach((item) => item.classList.toggle("active", item.dataset.panel === panel));
   });
 });
@@ -143,14 +188,24 @@ const sheets = $$(".sheet");
 
 const closeSheet = () => {
   backdrop.classList.remove("show");
-  sheets.forEach((sheet) => sheet.classList.remove("show"));
+  sheets.forEach((sheet) => {
+    sheet.classList.remove("show");
+    sheet.setAttribute("aria-hidden", "true");
+    sheet.inert = true;
+  });
 };
 
 const openSheet = (sheetId) => {
   const sheet = $(`#${sheetId}`);
   if (!sheet) return;
 
-  sheets.forEach((item) => item.classList.toggle("show", item === sheet));
+  sheets.forEach((item) => {
+    const active = item === sheet;
+
+    item.classList.toggle("show", active);
+    item.setAttribute("aria-hidden", active ? "false" : "true");
+    item.inert = !active;
+  });
   backdrop.classList.add("show");
 };
 
@@ -201,6 +256,19 @@ $("[data-confirm-all]").addEventListener("click", () => {
 $("[data-confirm-one]").addEventListener("click", () => {
   closeSheet();
   showToast(`${$("#confirm-name").textContent}已确认`);
+});
+
+$("#apply-routine").addEventListener("click", () => {
+  const occasion = $("#routine-occasion").value;
+  const presence = $("#routine-presence").value;
+  const occasionPill = contextButtons[1];
+  const timePill = contextButtons[2];
+
+  occasionPill.querySelector("strong").textContent = occasion;
+  timePill.querySelector("span").textContent = presence;
+  closeSheet();
+  setOutfit(occasion === "周末展览" ? 2 : occasion === "晚间聚餐" ? 1 : 0);
+  showToast("已按今日偏好刷新推荐");
 });
 
 document.addEventListener("keydown", (event) => {
