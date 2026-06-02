@@ -93,7 +93,7 @@
               <p class="kicker">Vestige</p>
               <h1>今天穿什么</h1>
             </div>
-            <button class="icon-btn" type="button" aria-label="添加穿搭" title="添加穿搭" data-sheet="capture-sheet">
+            <button class="icon-btn" type="button" aria-label="添加穿搭" title="添加穿搭" data-sheet="capture-sheet" data-capture-default="outfit">
               <svg><use href="#i-plus"></use></svg>
             </button>
           </header>
@@ -207,7 +207,7 @@
               <p class="kicker">72 件单品</p>
               <h1>衣橱资产</h1>
             </div>
-            <button class="icon-btn" type="button" aria-label="拍照录入" title="拍照录入" data-sheet="capture-sheet">
+            <button class="icon-btn" type="button" aria-label="拍照录入" title="拍照录入" data-sheet="capture-sheet" data-capture-default="item">
               <svg><use href="#i-camera"></use></svg>
             </button>
           </header>
@@ -520,33 +520,74 @@
       <div class="sheet-handle"></div>
       <header class="sheet-title">
         <div>
-          <p class="label">Capture</p>
-          <h2>录入新的穿搭记忆</h2>
+          <p class="label">Capture Pipeline</p>
+          <h2 id="capture-title">录入穿搭记忆</h2>
         </div>
         <button class="sheet-close" type="button" aria-label="关闭" data-close-sheet>×</button>
       </header>
-      <div class="capture-grid">
-        <button type="button" data-capture-action="穿搭照">
+
+      <p class="sheet-note capture-intro" id="capture-copy">从一张穿搭照识别单品、场景和可复穿规则，保存前由你确认。</p>
+
+      <div class="capture-mode" role="tablist" aria-label="录入类型">
+        <button class="active" type="button" role="tab" aria-selected="true" data-capture-mode="outfit">
           <svg><use href="#i-camera"></use></svg>
-          <strong>上传穿搭照</strong>
-          <span>识别整套搭配并保存为记忆</span>
+          穿搭照
         </button>
-        <button type="button" data-capture-action="单品">
+        <button type="button" role="tab" aria-selected="false" data-capture-mode="item">
           <svg><use href="#i-closet"></use></svg>
-          <strong>拍一件单品</strong>
-          <span>加入衣橱，补齐颜色和季节</span>
+          单品
         </button>
-        <button type="button" data-capture-action="购物截图">
+        <button type="button" role="tab" aria-selected="false" data-capture-mode="receipt">
           <svg><use href="#i-spark"></use></svg>
-          <strong>导入购物截图</strong>
-          <span>提取单品信息和预估成本</span>
+          购物截图
         </button>
       </div>
-      <div class="process-card">
-        <span>01 识别单品</span>
-        <span>02 用户确认</span>
-        <span>03 生成复穿规则</span>
+
+      <section class="capture-preview" aria-label="AI 录入预览">
+        <img id="capture-image" src="./assets/hero-outfit.png" alt="待识别的穿搭照片预览" />
+        <div class="capture-overlay">
+          <span id="capture-source">相册 / 今天 08:17</span>
+          <strong id="capture-status">已识别 4 件单品</strong>
+        </div>
+      </section>
+
+      <div class="process-card capture-process" aria-label="录入进度">
+        <span class="done">01 上传</span>
+        <span class="active">02 确认</span>
+        <span>03 入库</span>
       </div>
+
+      <div class="sheet-actions capture-actions">
+        <button class="primary-btn" type="button" id="save-capture">保存记忆</button>
+        <button class="ghost-btn" type="button" id="review-capture">逐项检查</button>
+      </div>
+
+      <section class="capture-review" id="capture-review" aria-label="识别结果确认">
+        <div class="capture-review-head">
+          <div>
+            <p class="label" id="capture-review-label">AI 识别结果</p>
+            <h3 id="capture-summary">4 件单品 + 1 套穿搭记忆</h3>
+          </div>
+          <span id="capture-confidence">平均 93%</span>
+        </div>
+        <div class="capture-review-list" id="capture-review-list"></div>
+      </section>
+
+      <div class="capture-meta">
+        <label>
+          <span>场景标签</span>
+          <input id="capture-tags" type="text" value="通勤、会议、春秋" />
+        </label>
+        <label>
+          <span>保存策略</span>
+          <select id="capture-save-mode">
+            <option>保存穿搭 + 新单品</option>
+            <option>仅保存穿搭记忆</option>
+            <option>仅补充衣橱单品</option>
+          </select>
+        </label>
+      </div>
+
     </section>
 
     <section class="sheet" id="routine-sheet" aria-label="今日偏好设置" aria-hidden="true" inert>

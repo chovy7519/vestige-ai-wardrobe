@@ -183,6 +183,111 @@ $("#preview-btn").addEventListener("click", () => {
   showToast(`${replaceTitle.textContent}预览已生成`);
 });
 
+const captureModes = {
+  outfit: {
+    title: "录入穿搭记忆",
+    copy: "从一张穿搭照识别单品、场景和可复穿规则，保存前由你确认。",
+    image: "./assets/hero-outfit.png",
+    source: "相册 / 今天 08:17",
+    status: "已识别 4 件单品",
+    summary: "4 件单品 + 1 套穿搭记忆",
+    confidence: "平均 93%",
+    tags: "通勤、会议、春秋",
+    saveMode: "保存穿搭 + 新单品",
+    primaryAction: "保存记忆",
+    reviewLabel: "AI 识别结果",
+    savedToast: "穿搭记忆已保存",
+    items: [
+      ["灰色短夹克", "外套 / 春秋 / 96%", "96%"],
+      ["白色圆领 T", "内搭 / 四季 / 92%", "92%"],
+      ["深蓝直筒裤", "下装 / 通勤 / 94%", "94%"],
+      ["黑色乐福鞋", "鞋履 / 正式 / 89%", "89%"],
+    ],
+  },
+  item: {
+    title: "录入单件衣服",
+    copy: "适合补齐衣橱资产，重点确认类别、颜色、季节和预计穿着成本。",
+    image: "./assets/wardrobe-flatlay.png",
+    source: "相机 / 自动裁切",
+    status: "待确认 1 件单品",
+    summary: "1 件新单品",
+    confidence: "置信 88%",
+    tags: "内搭、低饱和、春秋",
+    saveMode: "仅补充衣橱单品",
+    primaryAction: "保存单品",
+    reviewLabel: "单品属性",
+    savedToast: "单品已加入衣橱",
+    items: [["米白针织", "内搭 / 春秋 / 88%", "88%"]],
+  },
+  receipt: {
+    title: "导入购物截图",
+    copy: "从购物截图提取名称、价格和颜色，先生成候选资产，再决定是否入库。",
+    image: "./assets/wardrobe-flatlay.png",
+    source: "截图 / 订单信息",
+    status: "已提取 2 个价格字段",
+    summary: "2 件候选单品 + 价格",
+    confidence: "平均 85%",
+    tags: "待试穿、购物、价格已提取",
+    saveMode: "仅补充衣橱单品",
+    primaryAction: "保存候选",
+    reviewLabel: "截图提取",
+    savedToast: "购物截图候选已保存",
+    items: [
+      ["黑色托特包", "包袋 / ¥699 / 86%", "86%"],
+      ["深蓝西裤", "下装 / ¥459 / 84%", "84%"],
+    ],
+  },
+};
+
+const captureModeButtons = $$("[data-capture-mode]");
+const captureReviewList = $("#capture-review-list");
+let activeCaptureMode = "outfit";
+
+const renderCaptureMode = (modeName) => {
+  activeCaptureMode = modeName;
+  const mode = captureModes[modeName];
+
+  $("#capture-title").textContent = mode.title;
+  $("#capture-copy").textContent = mode.copy;
+  $("#capture-image").src = mode.image;
+  $("#capture-source").textContent = mode.source;
+  $("#capture-status").textContent = mode.status;
+  $("#capture-review-label").textContent = mode.reviewLabel;
+  $("#capture-summary").textContent = mode.summary;
+  $("#capture-confidence").textContent = mode.confidence;
+  $("#capture-tags").value = mode.tags;
+  $("#capture-save-mode").value = mode.saveMode;
+  $("#save-capture").textContent = mode.primaryAction;
+
+  captureReviewList.innerHTML = mode.items
+    .map(
+      ([name, meta, score]) => `
+        <label class="capture-review-item">
+          <input type="checkbox" checked />
+          <span>
+            <strong>${name}</strong>
+            <span>${meta}</span>
+          </span>
+          <b>${score}</b>
+        </label>
+      `,
+    )
+    .join("");
+
+  captureModeButtons.forEach((button) => {
+    const active = button.dataset.captureMode === modeName;
+
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", active ? "true" : "false");
+  });
+};
+
+captureModeButtons.forEach((button) => {
+  button.addEventListener("click", () => renderCaptureMode(button.dataset.captureMode));
+});
+
+renderCaptureMode(activeCaptureMode);
+
 const backdrop = $(".sheet-backdrop");
 const sheets = $$(".sheet");
 
@@ -234,6 +339,10 @@ $$("[data-sheet]").forEach((trigger) => {
       $("#confirm-confidence").value = trigger.dataset.detectConfidence;
     }
 
+    if (sheetId === "capture-sheet") {
+      renderCaptureMode(trigger.dataset.captureDefault || "outfit");
+    }
+
     openSheet(sheetId);
   });
 });
@@ -242,11 +351,14 @@ $$("[data-close-sheet]").forEach((control) => {
   control.addEventListener("click", closeSheet);
 });
 
-$$("[data-capture-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    closeSheet();
-    showToast(`已进入${button.dataset.captureAction}录入流程`);
-  });
+$("#save-capture").addEventListener("click", () => {
+  closeSheet();
+  showToast(captureModes[activeCaptureMode].savedToast);
+});
+
+$("#review-capture").addEventListener("click", () => {
+  $("#capture-review").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  showToast("已进入逐项检查状态");
 });
 
 $("[data-confirm-all]").addEventListener("click", () => {

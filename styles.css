@@ -1282,52 +1282,233 @@ svg {
   line-height: 1;
 }
 
-.capture-grid {
+.capture-mode {
   display: grid;
-  gap: 9px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 12px 0 10px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #e9e2d8;
 }
 
-.capture-grid button,
+.capture-mode button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 920;
+}
+
+.capture-mode button.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 8px 20px rgba(23, 26, 23, 0.08);
+}
+
+.capture-mode svg {
+  width: 15px;
+  height: 15px;
+}
+
+.capture-intro {
+  margin-bottom: 0;
+}
+
+.capture-preview {
+  position: relative;
+  height: 138px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.capture-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 58%;
+}
+
+.capture-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 36%, rgba(17, 20, 17, 0.68));
+}
+
+.capture-overlay {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  color: #fff;
+}
+
+.capture-overlay span,
+.capture-overlay strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.capture-overlay span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  font-weight: 820;
+}
+
+.capture-overlay strong {
+  font-size: 14px;
+}
+
+.capture-process {
+  margin-top: 8px;
+}
+
+.capture-process span {
+  min-height: 40px;
+}
+
+.capture-process span.done {
+  background: rgba(30, 137, 128, 0.16);
+  color: var(--teal);
+}
+
+.capture-process span.active {
+  background: #20251f;
+  color: #fff;
+}
+
+.capture-review {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.capture-review-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.capture-review-head h3 {
+  margin: 2px 0 0;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.capture-review-head > span {
+  flex: 0 0 auto;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: #edf2ed;
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.capture-review-list {
+  display: grid;
+  gap: 7px;
+}
+
+.capture-review-item {
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(23, 26, 23, 0.08);
+}
+
+.capture-review-item:first-child {
+  border-top: 0;
+}
+
+.capture-review-item input {
+  accent-color: var(--teal);
+}
+
+.capture-review-item strong,
+.capture-review-item span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.capture-review-item strong {
+  font-size: 13px;
+}
+
+.capture-review-item span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.capture-review-item b {
+  min-width: 45px;
+  text-align: right;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+
+.capture-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.capture-meta label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.capture-meta input,
+.capture-meta select {
+  min-height: 38px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0 11px;
+  font: inherit;
+  font-size: 12px;
+}
+
 .match-list button,
 .rule-list label {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
   color: var(--ink);
-}
-
-.capture-grid button {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 12px;
-  min-height: 76px;
-  padding: 12px;
-  text-align: left;
-}
-
-.capture-grid svg {
-  grid-row: span 2;
-  width: 22px;
-  height: 22px;
-  color: var(--teal);
-}
-
-.capture-grid strong,
-.capture-grid span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.capture-grid strong {
-  font-size: 15px;
-}
-
-.capture-grid span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 760;
 }
 
 .process-card {
