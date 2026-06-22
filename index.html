@@ -82,9 +82,14 @@
 
     <main class="workspace" aria-label="Vestige 手机产品界面">
       <section class="phone" aria-label="Vestige App">
+        <div class="phone-inner">
         <header class="status-bar">
           <span>9:41</span>
-          <span>5G&nbsp;&nbsp;87%</span>
+          <span class="dynamic-island" aria-hidden="true"></span>
+          <span class="status-icons" aria-label="5G 87%">
+            <span>5G</span>
+            <span class="battery" aria-hidden="true"><span class="battery-fill"></span></span>
+          </span>
         </header>
 
         <div class="screen active" data-screen="today">
@@ -501,6 +506,7 @@
             <span>AI</span>
           </button>
         </nav>
+        </div>
       </section>
 
       <aside class="product-notes" aria-label="产品设计摘要">
